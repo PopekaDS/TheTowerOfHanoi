@@ -108,12 +108,6 @@ int main() {
         {'A', COMPLETE_TOWER}, {'B', {}}, {'C', {}} // // // towers = { 'A': copy.copy(COMPLETE_TOWER), 'B' : [] , 'C' : [] }
     };
 
-    displayDisk(0);
-    displayDisk(1);
-    displayDisk(2);
-    displayDisk(3);
-    displayDisk(4);
-    displayDisk(5);
 
     return 0;
 }
@@ -122,6 +116,7 @@ void displayDisk(int width) {
     // Display a disk of the given width. A width of 0 means no disk.
     string emptySpace(TOTAL_DISKS - width, ' ');
     if (width == 0) {
+        // Display a pole segment without a disk:
         cout << emptySpace << "||" << emptySpace << '\n';
     } else {
         // Display the disk:
