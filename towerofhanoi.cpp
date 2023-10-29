@@ -63,21 +63,7 @@ def askForPlayerMove(towers):
             return fromTower, toTower
 
 
-def displayTowers(towers):
-    """Display the current state."""
 
-    # Display the three towers:
-    for level in range(TOTAL_DISKS, -1, -1):
-        for tower in (towers['A'], towers['B'], towers['C']):
-            if level >= len(tower):
-                displayDisk(0)  # Display the bare pole with no disk.
-            else:
-                displayDisk(tower[level])  # Display the disk.
-        print()
-
-    # Display the tower labels A, B, and C.
-    emptySpace = ' ' * (TOTAL_DISKS)
-    print('{0} A{0}{0} B{0}{0} C\n'.format(emptySpace))
 
 
 */
@@ -90,6 +76,7 @@ using namespace std;
 
 int TOTAL_DISKS = 5; // More disks means a more difficult puzzle.
 void displayDisk(int width);
+void displayTowers(map<char, vector<int>> towers);
 
 int main() {
     cout << "The Tower of Hanoi, by Al Sweigart al@inventwithpython.com\n";
@@ -105,7 +92,7 @@ int main() {
 
     // Set up the towers.The end of the list is the top of the tower.
     map<char, vector<int>> towers = {
-        {'A', COMPLETE_TOWER}, {'B', {}}, {'C', {}} // // // towers = { 'A': copy.copy(COMPLETE_TOWER), 'B' : [] , 'C' : [] }
+        {'A', COMPLETE_TOWER}, {'B', {}}, {'C', {}}
     };
 
 
@@ -117,11 +104,30 @@ void displayDisk(int width) {
     string emptySpace(TOTAL_DISKS - width, ' ');
     if (width == 0) {
         // Display a pole segment without a disk:
-        cout << emptySpace << "||" << emptySpace << '\n';
+        cout << emptySpace << "||" << emptySpace;
     } else {
         // Display the disk:
         string disk(width, '@');
         string numLabel = "_" + to_string(width);
-        cout << emptySpace << disk << numLabel << disk << emptySpace << '\n';
+        cout << emptySpace << disk << numLabel << disk << emptySpace;
     }
+}
+
+void displayTowers(map<char, vector<int>> towers) {
+    // Display the current state.
+    // Display the three towers:
+    for (int i = TOTAL_DISKS; i != -1; --i) {
+        for (auto tower : towers) {
+            if (i >= tower.second.size()) {
+                displayDisk(0); // Display the bare pole with no disk.
+            } else {
+                displayDisk(tower.second[i]); // Display the disk.
+            }
+        }
+        cout << "\n";
+    }
+
+    // Display the tower labels A, B, and C.
+    string emptySpace(TOTAL_DISKS, ' ');
+    cout << emptySpace << " A" << emptySpace << emptySpace << " B" << emptySpace << emptySpace << " C\n";
 }
