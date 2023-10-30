@@ -10,16 +10,8 @@ import sys
 def main():
 
 
-    while True:  # Run a single turn.
-        # Display the towers and disks:
-        displayTowers(towers)
+    while True:  # 
 
-        # Ask the user for a move:
-        fromTower, toTower = askForPlayerMove(towers)
-
-        # Move the top disk from fromTower to toTower:
-        disk = towers[fromTower].pop()
-        towers[toTower].append(disk)
 
         # Check if the user has solved the puzzle:
         if COMPLETE_TOWER in (towers['B'], towers['C']):
@@ -28,55 +20,19 @@ def main():
             sys.exit()
 
 
-def askForPlayerMove(towers):
-    """Asks the player for a move. Returns (fromTower, toTower)."""
-
-    while True:  # Keep asking player until they enter a valid move.
-        print('Enter the letters of "from" and "to" towers, or QUIT.')
-        print('(e.g. AB to moves a disk from tower A to tower B.)')
-        response = input('> ').upper().strip()
-
-        if response == 'QUIT':
-            print('Thanks for playing!')
-            sys.exit()
-
-        # Make sure the user entered valid tower letters:
-        if response not in ('AB', 'AC', 'BA', 'BC', 'CA', 'CB'):
-            print('Enter one of AB, AC, BA, BC, CA, or CB.')
-            continue  # Ask player again for their move.
-
-        # Syntactic sugar - Use more descriptive variable names:
-        fromTower, toTower = response[0], response[1]
-
-        if len(towers[fromTower]) == 0:
-            # The "from" tower cannot be an empty tower:
-            print('You selected a tower with no disks.')
-            continue  # Ask player again for their move.
-        elif len(towers[toTower]) == 0:
-            # Any disk can be moved onto an empty "to" tower:
-            return fromTower, toTower
-        elif towers[toTower][-1] < towers[fromTower][-1]:
-            print('Can\'t put larger disks on top of smaller ones.')
-            continue  # Ask player again for their move.
-        else:
-            # This is a valid move, so return the selected towers:
-            return fromTower, toTower
-
-
-
-
-
 */
 
 #include <iostream>
 #include <map>
 #include <vector>
 #include <string>
+#include <algorithm>
 using namespace std;
 
 int TOTAL_DISKS = 5; // More disks means a more difficult puzzle.
 void displayDisk(int width);
 void displayTowers(map<char, vector<int>> towers);
+void askForPlayerMove(map<char, vector<int>> towers, char& fromTower, char& toTower);
 
 int main() {
     cout << "The Tower of Hanoi, by Al Sweigart al@inventwithpython.com\n";
@@ -95,6 +51,21 @@ int main() {
         {'A', COMPLETE_TOWER}, {'B', {}}, {'C', {}}
     };
 
+    while (1) { // Run a single turn.
+        // Display the towers and disks:
+        displayTowers(towers);
+
+        // Ask the user for a move:
+        char fromTower, toTower;
+        askForPlayerMove(towers, fromTower, toTower);
+
+        // Move the top disk from fromTower to toTower:
+        int disk = towers[fromTower][towers[fromTower].size() - 1];
+        towers[fromTower].pop_back();
+        towers[toTower].push_back(disk);
+
+        // Check if the user has solved the puzzle:
+    }
 
     return 0;
 }
@@ -130,4 +101,46 @@ void displayTowers(map<char, vector<int>> towers) {
     // Display the tower labels A, B, and C.
     string emptySpace(TOTAL_DISKS, ' ');
     cout << emptySpace << " A" << emptySpace << emptySpace << " B" << emptySpace << emptySpace << " C\n";
+}
+
+void askForPlayerMove(map<char, vector<int>> towers, char& fromTower, char& toTower) {
+    // Asks the player for a move. Returns (fromTower, toTower).
+    while (1) { // Keep asking player until they enter a valid move.
+        std::cout << "Enter the letters of 'from' and 'to' towers, or QUIT.\n";
+        std::cout << "(e.g. AB to moves a disk from tower A to tower B.)\n";
+        std::cout << "> ";
+        string response;
+        cin >> response;
+        transform(response.begin(), response.end(), response.begin(), ::toupper);
+
+        if (response == "QUIT") {
+            cout << "Thanks for playing!\n";
+            exit(0);
+        }
+
+        // Make sure the user entered valid tower letters:
+        if (!(response == "AB" || response == "AC" || response == "BA" || response == "BC" || response == "CA" || response == "CB")) {
+            cout << "Enter one of AB, AC, BA, BC, CA, or CB.\n";
+            continue; // Ask player again for their move.
+        }
+            
+        // Syntactic sugar - Use more descriptive variable names:
+        fromTower = response[0];
+        toTower = response[1];
+
+        if (towers[fromTower].size() == 0) {
+            // The "from" tower cannot be an empty tower:
+            cout << "You selected a tower with no disks.\n";
+            continue; // Ask player again for their move.
+        } else if (towers[toTower].size() == 0) {
+            // Any disk can be moved onto an empty "to" tower:
+            break;
+        } else if (towers[toTower][towers[toTower].size() - 1] < towers[fromTower][towers[fromTower].size() - 1]) {
+            cout << "Can\'t put larger disks on top of smaller ones.";
+            continue; // Ask player again for their move.
+        } else {
+            // This is a valid move, so return the selected towers:
+            break;
+        }
+    }
 }
