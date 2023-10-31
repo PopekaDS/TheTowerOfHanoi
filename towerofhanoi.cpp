@@ -1,26 +1,7 @@
-/*
-The Tower of Hanoi, by Al Sweigart al@inventwithpython.com
-A stack-moving puzzle game.
-This code is available at https://nostarch.com/big-book-small-python-programming
-
-import copy
-import sys
-
-
-def main():
-
-
-    while True:  # 
-
-
-        # Check if the user has solved the puzzle:
-        if COMPLETE_TOWER in (towers['B'], towers['C']):
-            displayTowers(towers)  # Display the towers one last time.
-            print('You have solved the puzzle! Well done!')
-            sys.exit()
-
-
-*/
+// The Tower of Hanoi, by Al Sweigart
+// A stack-moving puzzle game.
+// This code is available at https://nostarch.com/big-book-small-python-programming
+// #77 TOWER OF HANOI
 
 #include <iostream>
 #include <map>
@@ -35,12 +16,12 @@ void displayTowers(map<char, vector<int>> towers);
 void askForPlayerMove(map<char, vector<int>> towers, char& fromTower, char& toTower);
 
 int main() {
-    cout << "The Tower of Hanoi, by Al Sweigart al@inventwithpython.com\n";
+    cout << "The Tower of Hanoi, by Al Sweigart\n";
     cout << "Move the tower of disks, one disk at a time, to another tower.Larger\n";
     cout << "disks cannot rest on top of a smaller disk.\n";
-    cout << "More info at https ://en.wikipedia.org/wiki/Tower_of_Hanoi\n";
+    cout << "More info at https://en.wikipedia.org/wiki/Tower_of_Hanoi\n";
 
-    // Start with all disks on tower A :
+    // Start with all disks on tower A:
     vector <int> COMPLETE_TOWER(TOTAL_DISKS);
     for (int i = 0; i < TOTAL_DISKS; ++i) {
         COMPLETE_TOWER[i] = TOTAL_DISKS - i;
@@ -65,6 +46,11 @@ int main() {
         towers[toTower].push_back(disk);
 
         // Check if the user has solved the puzzle:
+        if (towers['B'] == COMPLETE_TOWER || towers['C'] == COMPLETE_TOWER) {
+            displayTowers(towers); // Display the towers one last time.
+            cout << "You have solved the puzzle! Well done!\n";
+            return 0;
+        }
     }
 
     return 0;
